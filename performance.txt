@@ -1,0 +1,55 @@
+Steps for generating Hadoop task performance -
+1. Start Job history server ($ ./$HADOOP_INSTALL/sbin/mr-jobhistory-daemon.sh)
+2. After job completion, fetch records from:
+curl http://<JOBHISTORY_SERVER>:19888/ws/v1/history/mapreduce/jobs/<jobId>
+
+"Task_1": {
+	"job": {
+		"startTime": 1588039169686,
+		"finishTime": 1588039196240,
+		"duration": 26554
+	}
+}
+
+"Task_2": {
+	"job": {
+		"startTime": 1588039053213,
+		"finishTime": 1588039083672,
+		"duration": 30459
+	}
+}
+
+"Task_3": {
+	"job": {
+		"startTime": 1588038887181,
+		"finishTime": 1588038917407,
+		"duration": 30226
+	}
+}
+
+Steps for generating Spark task performance -
+1. Configured spark to enable logging and added logs location on hdfs
+(Add spark-defaults.conf in $SPARK_INSTALL/conf dir and add following lines in it:
+spark.eventLog.enabled true
+spark.eventLog.dir /user/root/sparkLogs)
+2. Started Job history server ($./$SPARK_INSTALL/sbin/start-history-server.sh)
+3. After job completion fetched records saved file from location (/user/root/sparkLogs)
+
+"Task_1": {
+	"Starting Timestamp": 1588042805107,
+	"Ending Timestamp": 1588042815944,
+	"duration": 10837
+}
+
+"Task_2": {
+	"Starting Timestamp": 1588041872206,
+	"Ending Timestamp": 1588041884147,
+	"duration": 11941
+}
+
+Task Performance comparison:
+Spark Task 1 and Hadoop Task 2 are same:
+Spark took ~11 seconds to completion while hadoop took ~30 seconds
+
+Spark Task 2 and Hadoop Task 3 are same:
+Spark took ~12 seconds to completion while hadoop took ~30 seconds
